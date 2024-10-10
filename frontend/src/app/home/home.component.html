@@ -1,0 +1,24 @@
+<div id="embeddedViewStyle" class="content-wrapper">
+  <!-- Title -->
+  <mat-card-title class="d-flex justify-content-center">
+    <p>Welcome on the homepage!</p>
+  </mat-card-title>
+  <!-- Content -->
+  <mat-card-content class="d-flex justify-content-center">
+    <!-- If the user is NOT logged in -->
+    <div *ngIf="!this.loginService.isAuthenticated()">
+
+    </div>
+
+    <!-- If the user is logged in -->
+    <div *ngIf="this.loginService.isAuthenticated()">
+      <div class="col">
+        <p>You're logged in as: <b>{{ username }}</b> and your ID is: <b>{{userId}}</b></p>
+        <p>Your privileges are: <b>{{ userPrivileges }}</b> </p>
+      </div>
+    </div>
+  </mat-card-content>
+  <!-- Space -->
+  <div class="bottom-space"> </div>
+</div>
+  

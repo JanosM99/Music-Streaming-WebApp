@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_DIALECT: mariadb
+      DB_PORT: 3306
+      DB_NAME: spring
+      DB_USER: springuser
+      DB_PASSWORD: springpw
+      BUCKET_HOST: minio
+      BUCKET_PORT: 9000
+      BUCKET_ACCESS_KEY: minioadmin
+      BUCKET_ACCESS_SECRET: minioadminpw
+      BUCKET_NAME: avatars
+      BUCKET_NAME_SONG: songs
+    ports:
+      - "8080:8080"
+    networks:
+      - app
+    depends_on:
+      - db
+      - minio
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: spring
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: springpw
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app
+
+  minio:
+    image: bitnami/minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadminpw
+      MINIO_DEFAULT_BUCKETS: avatars, songs
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio:/data
+    networks:
+      - app
+
+volumes:
+  db-data:
+  minio:
+
+networks:
+  app:

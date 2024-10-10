@@ -1,0 +1,89 @@
+<div id="embeddedViewStyle" class="content-wrapper">
+  <div class="spacer-player"></div>
+  <div class="d-flex flex-column justify-content-center align-items-center player-container">
+    <mat-card class="player w-50 h-50 p-4">
+      <!-- Player Header -->
+      <div class="player-top d-flex justify-content-between align-items-center">
+        <button class="player-btn btn btn-light" type="button">
+          <!-- Back Button -->
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <!-- Title -->
+        <span class="player-title">SoundBox Music Player</span>
+      </div>
+
+      <!-- Player Body -->
+      <div class="player-body d-flex justify-content-center align-items-center mt-4">
+          <!-- Current Song Cover & Title -->
+          <div class="current-song position-relative" [ngClass]="{'spinning': isPlaying}">
+              <!-- The background image will be set through CSS -->
+          </div>
+      </div>
+
+      <!-- Song Info Section -->
+      <div class="song-info d-flex justify-content-between align-items-center mt-4">
+        <div class="song-details">
+          <!-- Song name -->
+          <span class="song-name">{{ songDetails?.name || 'Loading...' }}</span>
+          <br>
+          <!-- Artist name -->
+          <span class="song-artist">{{ songDetails?.artist || 'Loading...' }}</span>
+        </div>
+        <!-- Like Button -->
+        <button class="player-btn btn btn-outline-light" 
+            type="button" 
+            [ngClass]="{ 'active': isLiked }" 
+            (click)="toggleLiked()">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+      </div>
+
+      <!-- Song Duration & Progress Bar -->
+      <div class="song-duration mt-3">
+        <div class="song-time progress">
+          <div
+            #progressBar
+            class="progress-bar bg-success"
+            role="progressbar"
+            style="width: 0%;"
+            aria-valuenow="0"
+            aria-valuemin="0"
+            aria-valuemax="100">
+          </div>
+        </div>
+        <div class="time d-flex justify-content-between">
+          <span class="text-secondary">{{ formatTime(currentTime) }} </span>
+          <span class="text-secondary">{{ formatTime(duration) }}</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls d-flex justify-content-between align-items-center mt-4">
+        <!-- Shuffle Button -->
+        <button class="player-btn btn btn-outline-light no-pointer" type="button" >
+          <i class="fa-solid fa-shuffle"></i>
+        </button>
+        <!-- Back Button -->
+        <button class="player-btn btn btn-outline-light prev-btn no-pointer" type="button">
+          <i class="fa-solid fa-backward"></i>
+        </button>
+        <!-- Play/Pause Button -->
+        <button class="player-btn btn btn-outline-light play-pause" type="button" (click)="togglePlayback()">
+          <i class="fa-solid" [ngClass]="{ 'fa-pause': isPlaying, 'fa-play': !isPlaying }"></i>
+        </button>
+        <!-- Next Button -->
+        <button class="player-btn btn btn-outline-light fa-next-btn no-pointer" type="button">
+          <i class="fa-solid fa-forward"></i>
+        </button>
+        <!-- Repeat Button -->
+        <button class="player-btn btn btn-outline-light" 
+            type="button" 
+            [ngClass]="{ 'active': isRepeating }" 
+            (click)="toggleRepeat()">
+            <i class="fa-solid fa-repeat"></i>
+        </button>       
+      </div>
+    </mat-card>
+  </div>
+</div>
+  

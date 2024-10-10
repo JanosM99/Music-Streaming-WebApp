@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "security.jwt",
+      "type": "at.technikum.springrestbackend.security.jwt.JwtProperties",
+      "sourceType": "at.technikum.springrestbackend.security.jwt.JwtProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "security.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Secret for issuing JWT",
+      "sourceType": "at.technikum.springrestbackend.security.jwt.JwtProperties"
+    }
+  ],
+  "hints": []
+}

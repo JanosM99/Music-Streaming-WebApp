@@ -1,0 +1,265 @@
+/* Main content area */
+#embeddedViewStyle {
+  height: 100vh;
+  overflow-y: auto; /* Allow vertical scroll only if necessary */
+}
+
+.content-wrapper {
+  padding-top: 100px; /* Add space below the navbar */
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Fixed navbar */
+.navbar {          
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; 
+}
+
+/* Site Bottom */
+.bottom-space {
+  padding-bottom: 50px;
+}
+
+/* Login and Register Box */
+#login-and-register-box {
+  width: 400px;
+  height: auto;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Input Fields */
+.inputFields {
+  width: 85%;
+}
+
+/* Avatar */
+.avatar-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.box-shadow-avatar {
+  box-shadow: 0 10px 20px 20px #6c93001a;
+}
+
+.image-container {
+  height: 100px;
+  width: 100px;
+  z-index: 1;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container.avatar-placeholder {
+  background-image: url('shared/assets/avatar-placeholder.png');
+}
+
+.icon-wrapper {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  cursor: pointer;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.icon-wrapper .icon {
+  color: white;
+  font-size: 16px;
+}
+
+.icon-wrapper label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-wrapper input[type='file'] {
+  display: none;
+}
+
+/* User Details */
+#user-details-box {
+  width: 400px;
+  height: auto; 
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px; 
+}
+
+/* Spacer */
+.spacer {
+  padding-bottom: 20px;
+}  
+
+/* Music Player Card */
+.player {
+  max-width: 30rem;
+  background-color: #2b2c2e;
+  box-shadow: 0 1rem 5rem rgba(0, 0, 0, 0.4);
+  border-radius: 1.5rem;
+}
+
+/* Player Header */
+.player-title {
+  position: absolute;
+  left: 25%;
+  font-size: 1.2rem;
+  color: #101112e3;
+  font-weight: bold;
+}
+
+/* Current Song Cover Section */
+.current-song {
+  width: 12rem;
+  height: 12rem;
+  border: 0.3rem solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  box-shadow: 0.6rem 0.6rem 2rem rgba(0, 0, 0, 0.5), 
+              -0.6rem -0.6rem 2rem rgba(255, 255, 255, 0.2);
+  background: #101112e3; 
+  background-image: url('shared/assets/record-img.png');
+  background-size: cover; 
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Spin animation */
+.spinning {
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.player-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+/* Song Info */
+.song-info {
+  margin-top: 1.5rem;
+}
+
+.song-name {
+  font-size: 1.4rem;
+}
+
+.song-artist {
+  font-size: 1rem;
+  color: #a8a9ab;
+}
+
+/* Player Controls */
+.player-btn {
+  width: 3.5rem;
+  height: 3.5rem;
+  border: none;
+  background-color: transparent;
+  color: #a8a9ab;
+}
+
+.player-btn i {
+  font-size: 1.3rem;
+}
+
+.play-pause i {
+  font-size: 1.5rem;
+}
+
+/* Song Duration */
+.song-duration {
+  margin-top: 1rem;
+}
+
+.song-time {
+  height: 0.4rem;
+  background-color: #2b2c2e;
+  border-radius: 0.2rem;
+}
+
+.time span {
+  font-size: 0.9rem;
+  color: #a8a9ab;
+}
+
+.spacer-player {
+  padding-bottom: 100px;
+}  
+
+.no-pointer {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Dialog */
+.open-dialog {
+  height: 100vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.dialog-button {
+  width: 48%;
+}
+
+.col-md-6 {
+  max-height: 90vh;
+  overflow: hidden; 
+}
+
+.record-image {
+  width: 150px;
+  height: 150px;
+  background-image: url('shared/assets/record-img.png');
+  background-size: cover; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

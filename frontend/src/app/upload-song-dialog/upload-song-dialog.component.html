@@ -1,0 +1,94 @@
+<div class="open-dialog modal-body d-flex justify-content-center align-items-center">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Title -->
+        <div class="col-12 text-center mb-4">
+            <h2>Upload Your Music!</h2> 
+        </div>
+
+        <!-- Left section: record image and song info -->
+        <div class="col-md-6 text-center d-flex flex-column justify-content-center align-items-center">
+          <div class="record-display bg-light p-3 rounded d-flex flex-column align-items-center">
+            <div class="record-image mb-3"></div> 
+            <div class="record-info text-center">
+                <h4>{{ songName || 'Song' }}</h4>
+                <p class="text-muted">{{ artistName || 'Artist' }}</p>
+              </div>
+          </div>
+        </div>
+  
+        <!-- Right section: input fields and file uploader -->
+        <div class="col-md-6 d-flex flex-column justify-content-center">
+            <form (ngSubmit)="uploadSong()" #songForm="ngForm">
+                <div class="form-group mb-3">
+                  <label for="songName">Song Name</label>
+                  <input
+                    type="text"
+                    id="songName"
+                    class="form-control"
+                    placeholder="Enter song name"
+                    [(ngModel)]="songName"
+                    name="songName"
+                    required
+                  />
+                  <div *ngIf="songForm.controls['songName']?.invalid && (songForm.controls['songName']?.touched || songForm.submitted)" class="text-danger">
+                    Name is required.
+                  </div>
+                </div>
+              
+                <div class="form-group mb-3">
+                  <label for="artistName">Artist Name</label>
+                  <input
+                    type="text"
+                    id="artistName"
+                    class="form-control"
+                    placeholder="Enter artist name"
+                    [(ngModel)]="artistName"
+                    name="artistName"
+                    required
+                  />
+                  <div *ngIf="songForm.controls['artistName']?.invalid && (songForm.controls['artistName']?.touched || songForm.submitted)" class="text-danger">
+                    Artist is required.
+                  </div>
+                </div>
+              
+                <div class="form-group mb-3">
+                  <label for="genre">Genre</label>
+                  <input
+                    type="text"
+                    id="genre"
+                    class="form-control"
+                    placeholder="Enter genre"
+                    [(ngModel)]="genre"
+                    name="genre"
+                    required
+                  />
+                  <div *ngIf="songForm.controls['genre']?.invalid && (songForm.controls['genre']?.touched || songForm.submitted)" class="text-danger">
+                    Genre is required.
+                  </div>
+                </div>
+              
+                <div class="form-group mb-4">
+                  <label for="fileInput">Upload Song File</label>
+                  <input
+                    type="file"
+                    id="fileInput"
+                    class="form-control-file"
+                    (change)="onFileSelected($event)"
+                    required
+                  />
+                  <div *ngIf="!selectedFile && (songForm.submitted)" class="text-danger">
+                    File is required.
+                  </div>
+                </div>
+              
+                <div class="d-flex justify-content-between w-100">
+                  <button type="submit" class="btn btn-primary dialog-button" [disabled]="songForm.invalid">Upload</button>
+                  <button type="button" class="btn btn-secondary dialog-button" (click)="cancel()">Cancel</button>
+                </div>
+            </form>              
+        </div>
+      </div>
+    </div>
+  </div>
+  
