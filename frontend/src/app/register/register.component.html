@@ -1,7 +1,7 @@
 <div id="embeddedViewStyle" class="content-wrapper">
   <mat-card id="login-and-register-box" class="position-absolute top-50 start-50 translate-middle">
     <!-- Title -->
-    <mat-card-title class="d-flex justify-content-center">
+    <mat-card-title class="d-flex justify-content-center text-light">
       Sign Up
     </mat-card-title>
     <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
@@ -73,13 +73,13 @@
       <!-- Buttons -->
       <mat-card-actions class="d-flex justify-content-center">
         <div class="d-grid gap-2 col-8 mx-auto">
-          <button mat-raised-button type="submit">
+          <button class="custom-button" type="submit">
             Sign Up
           </button>
         </div>
       </mat-card-actions>
     </form>
-    <button mat-button (click)="navigate()">
+    <button class="custom-button" (click)="navigate()">
       Already have an account?
     </button>
   </mat-card>

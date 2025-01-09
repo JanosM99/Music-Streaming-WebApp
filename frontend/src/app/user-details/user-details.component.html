@@ -1,177 +1,223 @@
 <div id="embeddedViewStyle" class="content-wrapper">
-  <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
-    <!-- First mat-card (User Details) -->
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <mat-card id="user-details-box">
-          <!-- Username -->
-          <p class="fw-bold">
-            Followers: <span class="text-success">{{ userDetails?.followerCount }}</span>
-          </p>
-          <mat-card-title class="fw-bold d-flex justify-content-center">
-            {{ userDetails?.username || 'Loading...' }}
-          </mat-card-title>
-          &nbsp;
-          <!-- Avatar Section -->
-          <mat-card-content>
-            <div class="d-flex justify-content-center">
-              <div class="avatar-container">
-                <div
-                  class="image-container"
-                  *ngIf="fileUrl; else placeholder"
-                  [ngClass]="{'box-shadow-avatar': !!selectedFile}"
-                  [ngStyle]="{backgroundImage: 'url(' + fileUrl + ')'}"
-                ></div>
-                <ng-template #placeholder>
-                  <div class="image-container avatar-placeholder"></div>
-                </ng-template>
-                <label for="avatar-input-file" *ngIf="!this.userIdParam">
-                  <div class="icon-wrapper">
-                    <input
-                      type="file"
-                      id="avatar-input-file"
-                      accept="image/*"
-                      (change)="onFileChange($event)"
-                    />
-                    <!-- Upload or Delete icon -->
-                    <span class="material-symbols-outlined" *ngIf="!fileUrl">
-                      upload
-                    </span>
-                    <span class="material-symbols-outlined" *ngIf="fileUrl" (click)="deleteAvatar()">
-                      delete
-                    </span>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </mat-card-content>
-          <!-- Profile Fields -->
-          <mat-card-content>
-            <form [formGroup]="userProfileForm" #formDirective="ngForm">
-              <!-- Email -->
-              <div class="d-flex justify-content-center">
-                <mat-form-field class="inputFields">
-                  <mat-label>Email</mat-label>
-                  <input matInput formControlName="email" required />
-                  <mat-error *ngIf="userProfileForm.get('email')?.hasError('required')">
-                    <strong>Email is required</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              <!-- Role -->
-              <div class="row justify-content-center" *ngIf="this.tokenService.isAdmin()">
-                <mat-form-field class="inputFields">
-                  <mat-label>Role</mat-label>
-                  <mat-select formControlName="role">
-                    <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <!-- Birthdate -->
-              <div class="d-flex justify-content-center">
-                <mat-form-field class="inputFields">
-                  <mat-label>Date of birth (DD.MM.YYYY)</mat-label>
-                  <input
-                    matInput
-                    formControlName="birthDate"
-                    [matDatepicker]="picker"
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="picker"
-                    matTooltip="Enter date"
-                    aria-label="Enter date"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                  <mat-error *ngIf="userProfileForm.get('birthDate')?.hasError('required')">
-                    <strong>Date of Birth is required</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              <!-- Country -->
-              <div class="d-flex justify-content-center">
-                <mat-form-field class="inputFields">
-                  <mat-label>Country</mat-label>
-                  <mat-select formControlName="country">
-                    <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="userProfileForm.get('country')?.hasError('required')">
-                    <strong>Country is required</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </form>
-          </mat-card-content>
-          <!-- Save Button -->
-          <mat-card-actions class="d-flex justify-content-center">
-            <div class="d-grid gap-2 col-4 mx-auto">
-              <button mat-button (click)="saveChanges()">Save</button>
-            </div>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </div>
-
+  <div class="player-container w-100">
+    <!-- User Name -->
+    <mat-card-title class="fw-bold d-flex justify-content-center text-light">
+      {{ userDetails?.username || 'Loading...' }}
+    </mat-card-title>
     <div class="spacer"></div>
+    <!-- Tab Group -->
+    <div class="d-flex justify-content-center align-items-center">
+      <mat-tab-group id="userDetails-tab">
+        <!-- First Tab: Profile -->
+        <mat-tab label="Profile">
+          <div class="d-flex justify-content-center">
+            <div class="col-lg-12">
+              <mat-card id="user-details-box">
+                <!-- Avatar Section -->
+                <mat-card-content>
+                  <div class="d-flex justify-content-center">
+                    <div class="avatar-container">
+                      <div
+                        class="image-container"
+                        *ngIf="fileUrl; else placeholder"
+                        [ngStyle]="{backgroundImage: 'url(' + fileUrl + ')'}"
+                      ></div>
+                      <ng-template #placeholder>
+                        <div class="image-container avatar-placeholder"></div>
+                      </ng-template>
+                      <label for="avatar-input-file" *ngIf="isViewingOwnProfile()">
+                        <div class="icon-wrapper">
+                          <input
+                            type="file"
+                            id="avatar-input-file"
+                            accept="image/*"
+                            (change)="onFileChange($event)"
+                          />
+                          <!-- Upload or Delete icon -->
+                          <span class="material-symbols-outlined text-black" *ngIf="!fileUrl"> upload </span>
+                          <span class="material-symbols-outlined text-black" *ngIf="fileUrl" (click)="deleteAvatar()"> delete </span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </mat-card-content>
 
-    <!-- Second mat-card (Password Change Section) -->
-    <div class="row justify-content-center" *ngIf="!this.userIdParam">
-      <div class="col-auto">
-        <mat-card id="user-details-box">
-          <mat-card-title class="d-flex justify-content-center mb-3">Password Change</mat-card-title>
-          <mat-card-content>
-            <form [formGroup]="passwordForm" #formDirective="ngForm">
-              <div class="row justify-content-center">
-                <mat-form-field class="inputFields">
-                  <mat-label>Old Password</mat-label>
-                  <input
-                    matInput
-                    [type]="'password'"
-                    id="input-old-password"
-                    formControlName="oldPassword"
-                    required
-                  />
-                </mat-form-field>
-              </div>
+                <!-- Profile Fields -->
+                <mat-card-content>
+                  <form [formGroup]="userProfileForm" #formDirective="ngForm">
+                    <!-- Email -->
+                    <div class="d-flex justify-content-center">
+                      <mat-form-field class="userDetails-inputFields">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" required />
+                        <mat-error *ngIf="userProfileForm.get('email')?.hasError('required')">
+                          <strong>Email is required</strong>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
 
-              <div class="row justify-content-center">
-                <mat-form-field class="inputFields">
-                  <mat-label>New Password</mat-label>
-                  <input
-                    matInput
-                    [type]="'password'"
-                    id="input-new-password"
-                    formControlName="newPassword"
-                    required
-                  />
-                </mat-form-field>
-              </div>
+                    <!-- Role (Visible if admin) -->
+                    <div class="d-flex justify-content-center" *ngIf="this.tokenService.isAdmin()">
+                      <mat-form-field class="userDetails-inputFields">
+                        <mat-label>Role</mat-label>
+                        <mat-select formControlName="role">
+                          <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
 
-              <div class="row justify-content-center">
-                <mat-form-field class="inputFields">
-                  <mat-label>Confirm New Password</mat-label>
-                  <input
-                    matInput
-                    [type]="'password'"
-                    id="confirm-new-password"
-                    formControlName="confirmNewPassword"
-                    required
-                  />
-                </mat-form-field>
-              </div>
-            </form>
-          </mat-card-content>
-          <!-- Save Button -->
-          <mat-card-actions class="d-flex justify-content-center">
-            <div class="d-grid gap-2 col-4 mx-auto">
-              <button mat-button (click)="changePassword()">Save</button>
+                    <!-- Birthdate -->
+                    <div class="d-flex justify-content-center">
+                      <mat-form-field class="userDetails-inputFields">
+                        <mat-label>Date of birth (DD.MM.YYYY)</mat-label>
+                        <input matInput formControlName="birthDate" [matDatepicker]="picker" />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker"
+                          matTooltip="Enter date"
+                          aria-label="Enter date"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="userProfileForm.get('birthDate')?.hasError('required')">
+                          <strong>Date of Birth is required</strong>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <!-- Country -->
+                    <div class="d-flex justify-content-center">
+                      <mat-form-field class="userDetails-inputFields">
+                        <mat-label>Country</mat-label>
+                        <mat-select formControlName="country">
+                          <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="userProfileForm.get('country')?.hasError('required')">
+                          <strong>Country is required</strong>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </form>
+                </mat-card-content>
+
+                <!-- Save Button -->
+                <mat-card-actions *ngIf="this.tokenService.isAdmin() || isViewingOwnProfile()" class="d-flex justify-content-center">
+                  <div class="d-grid gap-2 col-4 mx-auto">
+                    <button class="custom-button" (click)="saveChanges()">Save</button>
+                  </div>
+                </mat-card-actions>
+              </mat-card>
             </div>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+          </div>
+        </mat-tab>
+
+        <!-- Second Tab: Password Change -->
+        <mat-tab label="Password Change" *ngIf="isViewingOwnProfile()">
+          <div class="d-flex justify-content-center">
+            <div class="col-lg-12">
+              <mat-card id="user-details-box">
+                <mat-card-content>
+                  <form [formGroup]="passwordForm" #formDirective="ngForm">
+                    <!-- Old Password -->
+                    <div class="d-flex justify-content-center">
+                      <mat-form-field class="userDetails-inputFields">
+                        <mat-label>Old Password</mat-label>
+                        <input matInput [type]="'password'" formControlName="oldPassword" required />
+                      </mat-form-field>
+                    </div>
+
+                    <!-- New Password -->
+                    <div class="d-flex justify-content-center">
+                      <mat-form-field class="userDetails-inputFields">
+                        <mat-label>New Password</mat-label>
+                        <input matInput [type]="'password'" formControlName="newPassword" required />
+                      </mat-form-field>
+                    </div>
+
+                    <!-- Confirm New Password -->
+                    <div class="d-flex justify-content-center">
+                      <mat-form-field class="userDetails-inputFields">
+                        <mat-label>Confirm New Password</mat-label>
+                        <input matInput [type]="'password'" formControlName="confirmNewPassword" required />
+                      </mat-form-field>
+                    </div>
+                  </form>
+                </mat-card-content>
+
+                <!-- Save Button -->
+                <mat-card-actions class="d-flex justify-content-center">
+                  <div class="d-grid gap-2 col-4 mx-auto">
+                    <button class="custom-button" (click)="changePassword()">Save</button>
+                  </div>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+          </div>
+        </mat-tab>
+        <!-- Third Tab: My Songs -->
+        <mat-tab label="Songs">
+          <div class="d-flex justify-content-center">
+            <div class="col-lg-12">
+              <mat-card id="user-details-box">
+                <mat-card-content>
+                  <div *ngIf="songs.length > 0; else noSongs">
+                    <div class="song-list">
+                      <mat-card *ngFor="let song of songs" class="song-card" (click)="navigateToSong(song.id)">
+                        <div class="song-image-container"></div>
+                        <mat-card-content>
+                          <span class="song-name">{{ song.name || 'Loading...' }}</span>
+                          <br>
+                          <span class="song-artist">{{ song.artist || 'Loading...' }}</span>
+                        </mat-card-content>
+                        <mat-card-actions *ngIf="this.tokenService.isAdmin() || isViewingOwnProfile()">
+                          <button mat-button color="warn" class="delete-button" (click)="deleteSong(song.id); $event.stopPropagation();">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </mat-card-actions>
+                      </mat-card>
+                    </div>
+                  </div>
+                  <ng-template #noSongs>
+                    <p>This SoundBox is waiting to be filled with music!</p>
+                  </ng-template>
+                </mat-card-content>
+              </mat-card>              
+            </div>
+          </div>
+        </mat-tab>
+        <!-- Fourth Tab: My Playlists -->
+        <mat-tab label="Playlists">
+          <div class="d-flex justify-content-center">
+            <div class="col-lg-12">
+              <mat-card id="user-details-box">
+                <mat-card-content>
+                  <div *ngIf="playlists.length > 0; else noPlaylists">
+                    <div class="song-list">
+                      <mat-card *ngFor="let playlist of playlists" class="song-card" (click)="navigateToPlaylist(playlist.id)">
+                        <div class="song-image-container"></div>
+                        <mat-card-content>
+                          <span class="song-name">{{ playlist.name || 'Loading...' }}</span>
+                          <br>
+                          <span class="song-artist">{{ playlist.songs.length || 0 }} song(s)</span>
+                        </mat-card-content>
+                        <mat-card-actions *ngIf="this.tokenService.isAdmin() || isViewingOwnProfile()">
+                          <button mat-button color="warn" class="delete-button" (click)="deletePlaylist(playlist.id); $event.stopPropagation();">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </mat-card-actions>
+                      </mat-card>
+                    </div>
+                  </div>
+                  <ng-template #noPlaylists>
+                    <p>This SoundBox is waiting to be filled with playlists!</p>
+                  </ng-template>
+                </mat-card-content>
+              </mat-card>              
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 
-  <!-- Space -->
   <div class="bottom-space"></div>
 </div>

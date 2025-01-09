@@ -21,6 +21,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { MatIconModule } from '@angular/material/icon';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { AllSongsComponent } from './all-songs/all-songs.component';
 import {MatMenuModule} from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
@@ -28,6 +29,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import { MusicPlayerComponent } from './music-player/music-player.component';
 import { UploadSongDialogComponent } from './upload-song-dialog/upload-song-dialog.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { AllPlaylistsComponent } from './all-playlists/all-playlists.component';
+import { PlaylistPlayerComponent } from './playlist-player/playlist-player.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CreatePlaylistDialogComponent } from './create-playlist-dialog/create-playlist-dialog.component';
+import { AddToPlaylistDialogComponent } from './add-to-playlist-dialog/add-to-playlist-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,10 +45,16 @@ import { UploadSongDialogComponent } from './upload-song-dialog/upload-song-dial
     NavbarComponent,
     UserDetailsComponent,
     UserManagementComponent,
+    AllSongsComponent,
     MusicPlayerComponent,
-    UploadSongDialogComponent
+    UploadSongDialogComponent,
+    AllPlaylistsComponent,
+    PlaylistPlayerComponent,
+    AddToPlaylistDialogComponent,
+    CreatePlaylistDialogComponent,
   ],
   imports: [
+    MatDialogModule,
     BrowserModule,
     MatTableModule,
     ReactiveFormsModule,
@@ -50,6 +63,7 @@ import { UploadSongDialogComponent } from './upload-song-dialog/upload-song-dial
     MatPaginatorModule,
     MatSlideToggleModule,
     MatSelectModule,
+    MatTabsModule,
     FormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule,

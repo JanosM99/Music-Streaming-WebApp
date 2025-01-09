@@ -5,7 +5,6 @@ import { TokenService, get } from './token.service';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserDto } from '../../shared/models/UserDto.model';
-import { CountryDto } from '../../shared/models/CountryDto.model';
 
 @Injectable({
     providedIn: 'root'
@@ -81,6 +80,7 @@ export class LoginService {
   */
   logout() {
     this.removeToken();
+    localStorage.removeItem('returnUrl');
   }
 
   /**

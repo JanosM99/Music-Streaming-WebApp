@@ -1,24 +1,53 @@
 <div id="embeddedViewStyle" class="content-wrapper">
-  <!-- Title -->
-  <mat-card-title class="d-flex justify-content-center">
-    <p>Welcome on the homepage!</p>
-  </mat-card-title>
-  <!-- Content -->
-  <mat-card-content class="d-flex justify-content-center">
-    <!-- If the user is NOT logged in -->
-    <div *ngIf="!this.loginService.isAuthenticated()">
-
+  <div class="container mt-2">
+    <!-- Carousel -->
+    <div id="mainCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="assets/heroImg1.png" class="d-block w-100" alt="Main Image 1">
+        </div>
+        <div class="carousel-item">
+          <img src="assets/heroImg2.png" class="d-block w-100" alt="Main Image 2">
+        </div>
+        <div class="carousel-item">
+          <img src="assets/heroImg3.png" class="d-block w-100" alt="Main Image 3">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
 
-    <!-- If the user is logged in -->
-    <div *ngIf="this.loginService.isAuthenticated()">
-      <div class="col">
-        <p>You're logged in as: <b>{{ username }}</b> and your ID is: <b>{{userId}}</b></p>
-        <p>Your privileges are: <b>{{ userPrivileges }}</b> </p>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="card shadow-sm img-card" (click)="navigateToAllSongs()">
+          <img src="assets/thumbnail1.png" class="card-img-top" alt="All Songs">
+          <div class="card-body">
+            <p class="card-text">Explore new songs</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm img-card" (click)="navigateToAllPlaylists()">
+          <img src="assets/thumbnail2.png" class="card-img-top" alt="All Playlists">
+          <div class="card-body">
+            <p class="card-text">Discover fresh playlists</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm img-card" (click)="openUploadSongDialog()">
+          <img src="assets/thumbnail3.png" class="card-img-top" alt="Upload Song">
+          <div class="card-body">
+            <p class="card-text">Upload your first track</p>
+          </div>
+        </div>
       </div>
     </div>
-  </mat-card-content>
-  <!-- Space -->
-  <div class="bottom-space"> </div>
+  </div>
 </div>
-  

@@ -1,0 +1,53 @@
+/* app.component.css */
+/*
+.video-background {
+  position: relative;
+  height: 100vh; 
+  overflow: hidden; 
+}
+
+video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%; 
+  width: 100%;
+  height: auto;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+}
+
+.content {
+  position: relative;
+  z-index: 1; 
+  color: white; 
+  text-align: center; 
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.5); 
+  border-radius: 10px;
+}
+*/
+/* app.component.css */
+video {
+  position: fixed; /* Use fixed positioning */
+  top: 50%;
+  left: 50%;
+  min-width: 100%; /* Cover full width */
+  min-height: 100%; /* Cover full height */
+  width: auto; /* Set to auto for responsive width */
+  height: auto; /* Set to auto for responsive height */
+  z-index: -1; /* Behind the content */
+  transform: translate(-50%, -50%); /* Center the video */
+}
+
+router-outlet {
+  position: relative;
+  z-index: 1; /* On top of the video */
+  color: white; /* Text color */
+  text-align: center; /* Center text */
+  padding: 20px; /* Add some padding */
+  background: rgba(0, 0, 0, 0.5); /* Optional background for readability */
+  border-radius: 10px; /* Optional rounded corners */
+  height: 100vh; /* Make it take full height */
+}

@@ -207,7 +207,7 @@ public class FileController {
             }
 
             // Delete the song from Minio and from the db
-            songService.deleteSong(song, songBucketName);
+            songService.deleteSong(song.getId());
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Song deleted successfully.");
         } catch (Exception e) {

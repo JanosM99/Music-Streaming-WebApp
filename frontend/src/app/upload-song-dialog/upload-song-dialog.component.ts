@@ -3,6 +3,7 @@ import { SongService } from '../../shared/services/Song.service';
 import { SongDto } from '../../shared/models/SongDto.model';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-song-dialog',
@@ -19,6 +20,7 @@ export class UploadSongDialogComponent {
     private songService: SongService,
     public dialogRef: MatDialogRef<UploadSongDialogComponent>,
     private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   uploadSong(): void {
@@ -28,11 +30,18 @@ export class UploadSongDialogComponent {
         name: this.songName,
         artist: this.artistName,
         genre: this.genre,
+        likeCount: 0,
+        userId: 0
       };
 
       this.songService.uploadSong(this.selectedFile, songDto).subscribe({
         next: (response) => {
           this.openSnackBar("Song uploaded successfully! Enjoy your music!");
+          // Check if the current route is 'all-songs'
+          if (this.router.url === '/all-songs' || this.router.url === '/me') {
+            // Reload the page
+            window.location.reload();
+          }
           this.cancel();
         },
         error: (error) => {

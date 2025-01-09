@@ -4,13 +4,17 @@ import { FileService } from '../../shared/services/File.service';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { UserService } from '../../shared/services/User.service';
 import { UserDetails } from '../../shared/models/UserDetails.model';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PasswordChangeDto } from '../../shared/models/PasswordChangeDto.model';
 import { TokenService } from '../login/token.service';
 import { delay, map, Observable, of } from 'rxjs';
 import { CountryService } from '../../shared/services/Country.service';
 import { CountryDto } from '../../shared/models/CountryDto.model';
+import { SongService } from '../../shared/services/Song.service';
+import { SongDto } from '../../shared/models/SongDto.model';
+import { PlaylistService } from '../../shared/services/Playlist.service';
+import { PlaylistDto } from '../../shared/models/PlaylistDto.model';
 
 @Component({
   selector: 'app-user-details',
@@ -29,18 +33,8 @@ export class UserDetailsComponent implements OnInit {
   userIdParam: string | null | undefined;
   roles: string[] = ['ROLE_ADMIN', 'ROLE_USER'];
   countries: CountryDto[] = [];
-
-  // User profile form
-  userProfileForm: FormGroup = this.fb.group({
-    id: ['', Validators.required],
-    username:  ['', Validators.required],
-    email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")], [this.asyncEmailValidator]],
-    role: ['', Validators.required],
-    birthDate: ['', Validators.required],
-    country: ['', [Validators.required, Validators.pattern(/^[^\d]*$/)]],
-    followerCount:  ['', Validators.required],
-    active:  ['', Validators.required],
-  });
+  songs: SongDto[] = [];
+  playlists: PlaylistDto[] = [];
 
   // Password change
   passwordForm: FormGroup = this.fb.group({
@@ -49,28 +43,54 @@ export class UserDetailsComponent implements OnInit {
     confirmNewPassword: ['', Validators.required],
   });
 
+  userProfileForm: FormGroup;
+
   constructor(
+    public router: Router,
+    public tokenService: TokenService,
     private snackBar: MatSnackBar,
     private fileService: FileService,
     private userService: UserService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    public tokenService: TokenService,
     private countryService: CountryService,
-  ) { }
+    private songService: SongService,
+    private playlistService: PlaylistService,
+  ) 
+  { 
+    // User profile form
+    this.userProfileForm = this.fb.group({
+      id: ['', Validators.required],
+      username:  ['', Validators.required],
+      email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")], [this.asyncEmailValidator]],
+      role: ['', Validators.required],
+      birthDate: ['', Validators.required],
+      country: ['', [Validators.required, Validators.pattern(/^[^\d]*$/)]],
+      followerCount:  ['', Validators.required],
+      active:  ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     // Get the ID from the URL
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       this.userIdParam = params.get('id');
-  
-      if (this.userIdParam) {
+
+      // Check if the URL is '/me'
+      if (this.route.snapshot.url[0].path === 'me') {
+        this.userIdParam = 'me';
+      }
+
+      if (this.userIdParam && this.userIdParam !== 'me') {
         // Load user details by ID
         this.selectedUserId = +this.userIdParam;
         this.loadUserDetailsById();
-      } else {
+        this.disableForm();
+        localStorage.setItem('returnUrl', "/user/" + this.selectedUserId);
+      } else { 
         // Load details for the logged-in user
         this.loadMyUserDetails();
+        localStorage.setItem('returnUrl', "/me");
       }
       this.fetchCountries();
     });
@@ -84,7 +104,8 @@ export class UserDetailsComponent implements OnInit {
             this.userDetails = data;
             this.userId = data.id;
             this.loadAvatar();
-
+            this.loadUserSongs(this.userId);
+            this.loadUserPlaylists(this.userId);
             this.userProfileForm.patchValue(data);
 
             if (this.countries.length > 0) {
@@ -108,7 +129,8 @@ export class UserDetailsComponent implements OnInit {
           this.userDetails = data;
           this.userId = data.id;
           this.loadAvatar();
-
+          this.loadUserSongs(this.userId);
+          this.loadUserPlaylists(this.userId);
           this.userProfileForm.patchValue(data);
           if (this.countries.length > 0) {
             this.userProfileForm.patchValue({ country: data.country });
@@ -243,6 +265,59 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
+  loadUserSongs(userId: number): void {
+    this.songService.getSongsByUserId(userId).subscribe(
+      (songs) => {
+        this.songs = songs;
+      },
+      (error) => {
+        console.error('Error fetching songs', error);
+      }
+    );
+  }
+
+  deleteSong(songId: number): void {
+    this.songService.deleteSong(songId).subscribe(
+      () => {
+        // Remove the song from the local list after deletion
+        this.songs = this.songs.filter(song => song.id !== songId);
+      },
+      (error) => {
+        console.error('Error deleting song:', error);
+      }
+    );
+  }
+
+  loadUserPlaylists(userId: number): void {
+    this.playlistService.getPlaylistsByUserId(userId).subscribe(
+      (playlists) => {
+        this.playlists = playlists;
+      },
+      (error) => {
+        console.error('Error fetching playlists', error);
+      }
+    );
+  }
+
+  deletePlaylist(playlistId: number): void {
+    this.playlistService.deletePlaylist(playlistId).subscribe(
+      () => {
+        this.playlists = this.playlists.filter(playlist => playlist.id !== playlistId);
+      },
+      (error) => {
+        console.error('Error deleting playlist:', error);
+      }
+    );
+  }
+
+  navigateToSong(songId: number): void {
+    this.router.navigate(['/track', songId]); // Navigate to /track/songId
+  }
+
+  navigateToPlaylist(songId: number): void {
+    this.router.navigate(['/playlist', songId]); 
+  }
+
   asyncEmailValidator(control: AbstractControl): Observable<{ [key: string]: any } | null> {
     return of(control.value).pipe(
       delay(2000),
@@ -273,6 +348,20 @@ export class UserDetailsComponent implements OnInit {
     );
   }  
 
+  disableForm(): void {
+    // Disable the form if the user is NOT an admin AND the user is NOT accessing their own profile
+    if (!this.tokenService.isAdmin() && 
+        (this.userIdParam !== this.tokenService.getUserId())) {
+      this.userProfileForm.disable(); 
+    } else {
+      this.userProfileForm.enable();
+    }
+  }
+
+  isViewingOwnProfile(): boolean {
+    return this.userIdParam === this.tokenService.getUserId() || this.userIdParam === 'me';
+  }
+  
   openSnackBar(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000,

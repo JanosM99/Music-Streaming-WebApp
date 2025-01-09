@@ -1,57 +1,57 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 0;">
-  <div class="container-fluid justify-content-between">
-    <!-- Left elements -->
-    <div class="d-flex">
-      <!-- Search form -->
-      <form class="input-group w-auto my-auto d-none d-sm-flex">
-        <input
-          autocomplete="off"
-          type="search"
-          class="form-control rounded"
-          placeholder="Search"
-        />
-      </form>
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <!-- Left element for Home button -->
+    <div class="d-flex align-items-center">
+      <button class="btn navbar-button" 
+              (click)="navigateToHome()" 
+              matTooltip="Home" 
+              aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+        SoundBox
+      </button>
     </div>
-    <!-- Center elements -->
-    <ul class="navbar-nav flex-row d-none d-md-flex">
-      <li class="nav-item me-3 me-lg-1 active">
-        <button mat-raised-button (click)="navigateToHome()" matTooltip="Home" aria-label="Home">
-          <i class="fa-solid fa-house"></i>
-          Home
-        </button>
-      </li>
-      <li class="nav-item me-3 me-lg-1 active" *ngIf="this.tokenService.isAdmin()">
-        <button mat-raised-button (click)="navigateToUserManagement()" matTooltip="User Management" aria-label="User Management">
-          <i class="fa-solid fa-users"></i>
-          User Management
-        </button>
-      </li>
-    </ul>
+
     <!-- Right elements -->
-    <ul class="navbar-nav flex-row">
+    <ul class="navbar-nav flex-row ms-auto">
       <li class="nav-item me-3 me-lg-1">
         <div *ngIf="!this.loginService.isAuthenticated()">
-          <button mat-raised-button (click)="navigateToLogin()" matTooltip="Login" aria-label="Login">
+          <button class="btn navbar-button me-2" 
+                  (click)="navigateToLogin()" 
+                  matTooltip="Login" 
+                  aria-label="Login">
             <i class="fa-solid fa-right-to-bracket mr-2"></i>
             Login
           </button>
-          <button mat-raised-button (click)="navigateToSignUp()" matTooltip="Sign Up" aria-label="Sign Up">
+          <button class="btn navbar-button" 
+                  (click)="navigateToSignUp()" 
+                  matTooltip="Sign Up" 
+                  aria-label="Sign Up">
             <i class="fa-solid fa-user-plus mr-2"></i>
             Sign Up
           </button>
         </div>
         <div *ngIf="this.loginService.isAuthenticated()">
-          <button mat-raised-button [matMenuTriggerFor]="menu">
+          <button class="btn navbar-button" 
+                  [matMenuTriggerFor]="menu" 
+                  aria-label="User Menu">
             <i class="fa-solid fa-bars"></i>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="navigateToMyProfile()" matTooltip="My Profile" aria-label="My Profile">
+            <button mat-menu-item (click)="navigateToMyProfile()" matTooltip="Profile" aria-label="Profile">
               <i class="fa-solid fa-user mr-2"></i>
-              My Profile
+              Profile
             </button>
-            <button mat-menu-item (click)="openUploadSongDialog()" matTooltip="My Profile" aria-label="My Profile">
+            <button mat-menu-item (click)="openUploadSongDialog()" matTooltip="Upload Music" aria-label="Upload Music">
               <i class="fa-solid fa-cloud-arrow-up mr-2"></i>
               Upload Music
+            </button>
+            <button mat-menu-item (click)="openCreatePlaylistDialog()" matTooltip="Create Playlist" aria-label="Create Playlist">
+              <i class="fa-solid fa-headphones"></i>
+              Create Playlist
+            </button>
+            <button mat-menu-item (click)="navigateToUserManagement()" *ngIf="this.tokenService.isAdmin()" matTooltip="User Management" aria-label="User Management">
+              <i class="fa-solid fa-users"></i>
+              User Management
             </button>
             <button mat-menu-item (click)="logout()" matTooltip="Logout" aria-label="Logout">
               <i class="fa-solid fa-right-from-bracket mr-2"></i>

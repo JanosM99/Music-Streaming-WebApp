@@ -1,0 +1,11 @@
+<h2 mat-dialog-title style="color: aliceblue;">Create a New Playlist</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Playlist Name</mat-label>
+    <input matInput [(ngModel)]="playlistName" placeholder="Enter playlist name" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="custom-button" (click)="onClose()">Cancel</button>
+  <button class="custom-button" color="primary" (click)="onCreatePlaylist()" [disabled]="!playlistName.trim()">Create</button>
+</mat-dialog-actions>

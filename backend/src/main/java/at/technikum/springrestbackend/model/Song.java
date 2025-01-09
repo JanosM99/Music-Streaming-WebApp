@@ -28,8 +28,8 @@ public class Song {
 
     private String fileName;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany(mappedBy = "songs")

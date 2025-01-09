@@ -1,0 +1,96 @@
+<div class="container-fluid">
+    <div class="row vh-100">
+        <!-- Main Player Area -->
+        <div class="d-flex flex-column justify-content-center align-items-center main-content">
+            <div class="playlist-player player-card w-75 h-75 p-4">
+                <!-- Player Content Here -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button class="player-btn btn btn-outline-light" type="button" (click)="navigateBack()">
+                        <!-- Back Button -->
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h3 style="flex: 1; text-align: center" class="text-light">{{ playlistName || 'Loading...' }}</h3>
+                    <a *ngIf="this.loginService.isAuthenticated()" class="playlist-profile-button" [routerLink]="['/user', playlistUserId]" aria-label="User Profile">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                </div>
+
+                <div class="player-body d-flex justify-content-center align-items-center mt-4">
+                    <!-- Current Song Cover & Title -->
+                    <div class="current-song position-relative" [ngClass]="{'spinning': isPlaying}">
+                        <!-- The background image will be set through CSS -->
+                    </div>
+                </div>
+
+                <!-- Song Info -->
+                <div class="song-info text-center mb-3">
+                    <h5 class="song-name">{{ songDetails?.name || 'Loading...' }}</h5>
+                    <p class="song-artist">{{ songDetails?.artist || 'Loading...' }}</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress mb-6" style="height: 5px;">
+                    <div #progressBar class="progress-bar bg-primary.bg-gradient" role="progressbar" style="width: 0%;"></div>
+                </div>
+                <div class="d-flex justify-content-between text-secondary">
+                    <span>{{ formatTime(currentTime) }}</span>
+                    <span>{{ formatTime(duration) }}</span>
+                </div>
+
+                <!-- Playlist Songs -->
+                <div class="playlist-songs">
+                    <ul class="list-group list-group-flush w-100">
+                        <li 
+                            *ngFor="let song of playlistSongs; let i = index"
+                            class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                            [ngClass]="{'active': currentSongIndex === i}"
+                            (click)="playSongFromPlaylist(i)"
+                            style="cursor: pointer;">
+                            <span class="song-index">{{ i + 1 }}.</span>
+                            <div class="text-center mx-auto">
+                                <span class="playlist-song-name">{{ song.name }}</span>
+                                <span class="playlist-song-artist">{{ song.artist }}</span>
+                            </div>
+                            <!-- Delete Button -->
+                            <button mat-button color="warn" *ngIf="playlistId === playlistUserId || this.tokenService.isAdmin()" (click)="removeSong(playlistId!, song.id)" class="btn btn-light">
+                                <i class="fa-solid fa-trash" style="color: red;"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Bottom Player Controls -->
+        <div class="playlist-controls bottom-controls fixed-bottom text-white py-3">
+            <div class="container d-flex justify-content-center align-items-center">
+                <!-- Shuffle Button -->
+                <button class="btn btn-outline-light mx-2" 
+                    [ngClass]="{ 'active': isShuffled }" 
+                    (click)="toggleShuffle()">
+                    <i class="fa-solid fa-shuffle"></i>
+                </button>
+                <!-- Previous Button -->
+                <button class="btn btn-outline-light mx-2" (click)="playPreviousSong()">
+                    <i class="fa-solid fa-backward"></i>
+                </button>
+                <!-- Play/Pause Button -->
+                <button class="btn btn-outline-light mx-2" (click)="togglePlayback()">
+                    <i class="fa-solid" [ngClass]="{ 'fa-pause': isPlaying, 'fa-play': !isPlaying }"></i>
+                </button>
+                <!-- Next Button -->
+                <button class="btn btn-outline-light mx-2" (click)="playNextSong()">
+                    <i class="fa-solid fa-forward"></i>
+                </button>
+                <!-- Repeat Button -->
+                <button class="btn btn-outline-light mx-2" 
+                    [ngClass]="{ 'active': isRepeating }" 
+                    (click)="toggleRepeat()">
+                    <i class="fa-solid fa-repeat"></i>
+                </button>   
+            </div>
+        </div>
+
+    </div>
+</div>

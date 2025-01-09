@@ -7,5 +7,11 @@
 <!-- navbar.component.html -->
 <app-navbar></app-navbar>
 
-<!-- app.component.html -->
+<!-- video background -->
+<video onloadedmetadata="this.muted=true" autoplay loop  preload="auto" id="myVideo">
+    <source src="assets/background.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
+
+<!-- Content directly over the video -->
 <router-outlet></router-outlet>

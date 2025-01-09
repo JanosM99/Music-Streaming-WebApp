@@ -1,12 +1,14 @@
 package at.technikum.springrestbackend.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserDetailsDto {
 
     private Long id;

@@ -1,0 +1,39 @@
+<div id="embeddedViewStyle" class="content-wrapper">
+  <!-- Header -->
+  <mat-card-header class="d-flex justify-content-center">
+    <!-- Filter -->
+    <div class="input-group mb-3 custom-search-bar">
+      <button (click)="applyFilter()" class="input-group-text">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <input type="text" class="form-control" placeholder="Search for playlists..." [(ngModel)]="filter" (keyup.enter)="applyFilter()" aria-label="Filter">
+    </div> 
+  </mat-card-header>
+  <div class="bottom-space"></div>
+  <mat-card-content>
+    <!-- Playlist List -->
+    <div class="p-2">
+      <div class="song-list">
+        <mat-card *ngFor="let playlist of availablePlaylists.data" class="song-card" (click)="navigateToPlaylist(playlist.id)">
+          <div class="song-image-container"></div> <!-- Image Container -->
+          <mat-card-content style="flex-grow: 1;">
+            <span class="song-name">{{ playlist.name || 'Loading...' }}</span>
+            <br>
+          </mat-card-content>
+          <div *ngIf="playlist.userId === this.userId || this.tokenService.isAdmin()" class="d-flex justify-content-center align-items-end">
+            <!-- Delete Button -->
+            <button mat-button color="warn" (click)="deletePlaylist(playlist.id); $event.stopPropagation();" class="btn btn-light">
+              <i class="fa-solid fa-trash" style="color: red;"></i>
+            </button>
+          </div>
+        </mat-card>
+      </div>
+      <div class="bottom-space"></div>
+      <!-- Paginator -->
+      <div class="d-flex justify-content-center">
+        <mat-paginator #paginator [length]="length" [pageSize]="5" (page)="handlePageEvent($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</div>

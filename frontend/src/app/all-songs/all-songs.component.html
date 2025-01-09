@@ -1,0 +1,50 @@
+<div id="embeddedViewStyle" class="content-wrapper">
+  <!-- Header -->
+  <mat-card-header class="d-flex justify-content-center">
+    <!-- Filter -->
+    <div class="input-group mb-3 custom-search-bar">
+      <button (click)="applyFilter()" class="input-group-text">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <input type="text" class="form-control" placeholder="Search for songs..." [(ngModel)]="filter" (keyup.enter)="applyFilter()" aria-label="Filter">
+    </div>    
+  </mat-card-header>
+  <div class="bottom-space"></div>
+  <mat-card-content>
+    <!-- Song List -->
+    <div class="p-2">
+      <div class="song-list">
+        <mat-card *ngFor="let song of availableSongs.data" class="song-card" (click)="navigateToSong(song.id)">
+          <div class="song-image-container"></div>
+          <mat-card-content>
+            <span class="song-name">{{ song.name }}</span>
+            <br>
+            <span class="song-artist">{{ song.artist }}</span>
+            <br>
+            <span class="song-genre">{{ song.genre }}</span>
+          </mat-card-content>
+          <div class="d-flex justify-content-center align-items-end">
+            <ng-container *ngIf="this.loginService.isAuthenticated()">
+              <!-- Add Button -->
+              <button mat-button  class="btn btn-light" (click)="openAddToPlaylistDialog(song.id); $event.stopPropagation();">
+                <i class="fa-solid fa-plus" style="color: black;"></i>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="song.userId === this.userId || this.tokenService.isAdmin()">
+              <!-- Delete Button -->
+              <button mat-button color="warn" (click)="deleteSong(song.id); $event.stopPropagation();" class="btn btn-light">
+                <i class="fa-solid fa-trash" style="color: red;"></i>
+              </button>
+            </ng-container>
+          </div>
+        </mat-card>
+      </div>
+      <div class="bottom-space"></div>
+      <!-- Paginator -->
+      <div class="d-flex justify-content-center">
+        <mat-paginator #paginator [length]="length" [pageSize]="5" (page)="handlePageEvent($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</div>

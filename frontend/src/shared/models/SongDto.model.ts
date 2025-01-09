@@ -3,4 +3,6 @@ export interface SongDto{
     name: string;
     artist: string;
     genre: string;
+    likeCount: number;
+    userId: number
 }

@@ -11,7 +11,8 @@ export class AuthGuard implements CanActivate {
 
   constructor(private router: Router,
     private loginService: LoginService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar
+  ) { }
 
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

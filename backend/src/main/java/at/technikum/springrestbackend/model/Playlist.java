@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "playlist")
 public class Playlist {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -20,7 +21,9 @@ public class Playlist {
 
     private String name;
 
-    private Long user_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToMany
     @JoinTable(
@@ -31,3 +34,4 @@ public class Playlist {
     private List<Song> songs = new ArrayList<>();
 
 }
+

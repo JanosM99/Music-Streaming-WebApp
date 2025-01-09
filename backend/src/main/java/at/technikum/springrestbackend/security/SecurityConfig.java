@@ -50,6 +50,12 @@ public class SecurityConfig {
                         .requestMatchers("api/users/create").permitAll()
                         .requestMatchers("api/users/deleteUser/{id}").hasRole("ADMIN")
                         .requestMatchers("api/country/all").permitAll()
+                        .requestMatchers("api/songs/get-all").permitAll()
+                        .requestMatchers("api/songs/{id}").permitAll()
+                        .requestMatchers("api/files/songs/{id}").permitAll()
+                        .requestMatchers("api/playlists/user/{id}").permitAll()
+                        .requestMatchers("api/playlists/get-all").permitAll()
+                        .requestMatchers("api/playlists/{id}").permitAll()
                         .requestMatchers(
                                 // Swagger UI
                                 "/swagger-ui/**",
